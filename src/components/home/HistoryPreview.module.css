@@ -1,0 +1,46 @@
+.section {
+  padding: 24px 0;
+}
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-left: 2px solid var(--border);
+  margin-left: 8px;
+}
+.item {
+  position: relative;
+  padding: 0 0 32px 28px;
+}
+.item::before {
+  content: "";
+  position: absolute;
+  left: -9px;
+  top: 14px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--red);
+}
+.year {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--red-soft);
+}
+.desc {
+  color: var(--muted);
+}
+.more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  color: var(--muted);
+}
+.more small {
+  font-size: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0 8px;
+}
