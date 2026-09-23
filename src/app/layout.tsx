@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Noto_Sans_KR, Bebas_Neue } from "next/font/google";
 import "@/styles/globals.css";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
 
 const noto = Noto_Sans_KR({
   subsets: ["latin"],
@@ -40,7 +42,9 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           본문으로 건너뛰기
         </a>
+        <Header />
         <main id="main">{children}</main>
+        <Footer />
       </body>
     </html>
   );
