@@ -1,0 +1,49 @@
+.hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(72px, 14vw, 160px) 0 clamp(64px, 10vw, 120px);
+}
+.orb {
+  position: absolute;
+  right: -12vw;
+  bottom: -18vw;
+  width: min(60vw, 560px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--red);
+  opacity: 0.85;
+  z-index: 0;
+}
+.content {
+  position: relative;
+  z-index: 1;
+}
+.title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(4.5rem, 18vw, 11rem);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+}
+.line {
+  display: block;
+  overflow: hidden;
+}
+.line > span {
+  display: inline-block;
+}
+.accent {
+  color: var(--red-soft);
+}
+.lead {
+  margin-top: 24px;
+  max-width: 44ch;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
+.actions {
+  margin-top: 32px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
