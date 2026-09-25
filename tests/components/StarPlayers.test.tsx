@@ -7,8 +7,8 @@ describe("StarPlayers", () => {
     render(
       <StarPlayers
         players={[
-          { id: "a", name: "선수A", position: "투수" },
-          { id: "b", name: "선수B", position: "포수" },
+          { name: "선수A", number: "1", position: "투수" },
+          { name: "선수B", number: "2", position: "포수" },
         ]}
       />,
     );

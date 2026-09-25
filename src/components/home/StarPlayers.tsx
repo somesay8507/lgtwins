@@ -21,7 +21,7 @@ export default function StarPlayers({ players }: { players: Player[] }) {
       <SectionTitle id="players-title" eyebrow="Players" title="스타 플레이어" />
       <ul className={styles.list}>
         {players.map((p) => (
-          <li key={p.id} data-scroll-item>
+          <li key={p.name} data-scroll-item>
             <Card className={styles.card}>
               {/* 선수 사진은 쓰지 않는다. 이니셜 아바타로 대체 */}
               <span className={styles.avatar} aria-hidden="true">

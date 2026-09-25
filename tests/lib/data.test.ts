@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { getNextGame, getRecentGames } from "@/lib/games";
 import { getStandingSummary } from "@/lib/standings";
-import { getStarPlayers } from "@/lib/players";
+import { getPlayers, getStarPlayers } from "@/lib/players";
 import { getChampionships, getHistoryEvents } from "@/lib/history";
 
 describe("games", () => {
@@ -28,11 +28,23 @@ describe("standings", () => {
 });
 
 describe("players", () => {
-  it("getStarPlayers returns 3-4 players with unique ids", async () => {
-    const players = await getStarPlayers();
-    expect(players.length).toBeGreaterThanOrEqual(3);
-    expect(players.length).toBeLessThanOrEqual(4);
-    expect(new Set(players.map((p) => p.id)).size).toBe(players.length);
+  it("getPlayers returns all 74 registered players across four positions", async () => {
+    const players = await getPlayers();
+    expect(players).toHaveLength(74);
+    expect(players.filter((p) => p.position === "투수")).toHaveLength(42);
+    expect(players.filter((p) => p.position === "포수")).toHaveLength(7);
+    expect(players.filter((p) => p.position === "내야수")).toHaveLength(15);
+    expect(players.filter((p) => p.position === "외야수")).toHaveLength(10);
+  });
+
+  it("getStarPlayers returns exactly the 4 known stars, a subset of all players", async () => {
+    const all = await getPlayers();
+    const stars = await getStarPlayers();
+    expect(stars).toHaveLength(4);
+    expect(new Set(stars.map((p) => p.name)).size).toBe(4);
+    for (const star of stars) {
+      expect(all.some((p) => p.name === star.name)).toBe(true);
+    }
   });
 });
 

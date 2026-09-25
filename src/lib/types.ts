@@ -22,10 +22,12 @@ export type StandingSummary = {
   draws: number;
 };
 
+export type PlayerPosition = "투수" | "포수" | "내야수" | "외야수";
+
 export type Player = {
-  id: string;
   name: string;
-  position: string;
+  number: string | null;
+  position: PlayerPosition;
 };
 
 export type Championship = {
