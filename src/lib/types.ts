@@ -31,3 +31,12 @@ export type Player = {
 export type Championship = {
   year: number;
 };
+
+export type HistoryCategory = "우승" | "준우승" | "창단" | "감독" | "기록";
+
+export type HistoryEvent = {
+  year: number;
+  category: HistoryCategory;
+  title: string;
+  description?: string;
+};

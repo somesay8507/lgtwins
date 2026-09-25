@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { getNextGame, getRecentGames } from "@/lib/games";
 import { getStandingSummary } from "@/lib/standings";
 import { getStarPlayers } from "@/lib/players";
-import { getChampionships } from "@/lib/history";
+import { getChampionships, getHistoryEvents } from "@/lib/history";
 
 describe("games", () => {
   it("getNextGame returns a game that starts after now", async () => {
@@ -37,10 +37,18 @@ describe("players", () => {
 });
 
 describe("history", () => {
-  it("getChampionships returns unique years in ascending order", async () => {
+  it("getHistoryEvents returns all events in ascending year order", async () => {
+    const events = await getHistoryEvents();
+    const years = events.map((e) => e.year);
+    expect(years).toEqual([...years].sort((a, b) => a - b));
+    expect(events.length).toBeGreaterThan(0);
+  });
+
+  it("getChampionships returns only 우승 events, unique ascending years", async () => {
     const titles = await getChampionships();
     const years = titles.map((t) => t.year);
     expect(years).toEqual([...years].sort((a, b) => a - b));
     expect(new Set(years).size).toBe(years.length);
+    expect(years).toEqual([1990, 1994, 2023]);
   });
 });
