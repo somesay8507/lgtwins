@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRef } from "react";
 import SectionTitle from "@/components/ui/SectionTitle";
 import { useScrollReveal } from "@/lib/animations";
@@ -25,10 +26,9 @@ export default function HistoryPreview({ titles }: { titles: Championship[] }) {
           </li>
         ))}
       </ol>
-      {/* 1단계(역사 페이지)에서 /history 링크로 교체 */}
-      <span aria-disabled="true" className={styles.more}>
-        전체 역사 보기 <small>준비 중</small>
-      </span>
+      <Link href="/history" className={styles.more}>
+        전체 역사 보기
+      </Link>
     </section>
   );
 }

@@ -38,9 +38,6 @@
   margin-top: 8px;
   color: var(--muted);
 }
-.more small {
-  font-size: 0.7rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  padding: 0 8px;
+.more:hover {
+  color: var(--red-soft);
 }

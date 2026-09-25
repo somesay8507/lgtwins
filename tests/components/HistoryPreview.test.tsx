@@ -9,11 +9,11 @@ describe("HistoryPreview", () => {
     expect(screen.getByText("1994")).toBeInTheDocument();
   });
 
-  it("shows the full-history link as coming soon", () => {
+  it("links to the full history page", () => {
     render(<HistoryPreview titles={[{ year: 1990 }]} />);
-    expect(screen.getByText(/전체 역사 보기/)).toHaveAttribute(
-      "aria-disabled",
-      "true",
+    expect(screen.getByText("전체 역사 보기")).toHaveAttribute(
+      "href",
+      "/history",
     );
   });
 });
