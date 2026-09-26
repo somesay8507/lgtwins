@@ -1,0 +1,29 @@
+.section {
+  padding: 64px 0 96px;
+}
+.back {
+  display: inline-block;
+  margin-bottom: 32px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.back:hover {
+  color: var(--red-soft);
+}
+.number {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 6rem);
+  line-height: 1;
+  color: var(--red-soft);
+}
+.name {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 7vw, 4.5rem);
+  font-weight: 400;
+  margin-top: 8px;
+}
+.position {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 1.1rem;
+}
