@@ -15,7 +15,7 @@ export const revalidate = 60;
 export default async function Home() {
   const [nextGame, recent, standing, players, titles] = await Promise.all([
     safe(() => getNextGame()),
-    safe(getRecentGames),
+    safe(() => getRecentGames(5)),
     safe(getStandingSummary),
     safe(getStarPlayers),
     safe(getChampionships),

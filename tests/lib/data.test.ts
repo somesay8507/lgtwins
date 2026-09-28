@@ -1,21 +1,49 @@
 import { describe, expect, it } from "vitest";
-import { getNextGame, getRecentGames } from "@/lib/games";
+import { getNextGame, getRecentGames, getSchedule, getUpcomingGames } from "@/lib/games";
 import { getStandingSummary } from "@/lib/standings";
 import { getPlayers, getStarPlayers } from "@/lib/players";
 import { getChampionships, getHistoryEvents } from "@/lib/history";
 
 describe("games", () => {
-  it("getNextGame returns a game that starts after now", async () => {
+  it("getUpcomingGames returns 5 games all starting after now", async () => {
     const now = new Date("2026-09-20T03:00:00Z");
-    const game = await getNextGame(now);
-    expect(game).not.toBeNull();
-    expect(new Date(game!.startsAt).getTime()).toBeGreaterThan(now.getTime());
+    const games = await getUpcomingGames(now);
+    expect(games).toHaveLength(5);
+    for (const g of games) {
+      expect(new Date(g.startsAt).getTime()).toBeGreaterThan(now.getTime());
+    }
   });
 
-  it("getRecentGames returns 5 results with valid result codes", async () => {
+  it("getNextGame returns the first upcoming game", async () => {
+    const now = new Date("2026-09-20T03:00:00Z");
+    const [next, upcoming] = await Promise.all([
+      getNextGame(now),
+      getUpcomingGames(now),
+    ]);
+    expect(next).not.toBeNull();
+    expect(next).toEqual(upcoming[0]);
+  });
+
+  it("getRecentGames returns all 10 results by default, with valid result codes", async () => {
     const games = await getRecentGames();
-    expect(games).toHaveLength(5);
+    expect(games).toHaveLength(10);
     for (const g of games) expect(["W", "L", "D"]).toContain(g.result);
+  });
+
+  it("getRecentGames returns only the requested number when a limit is given", async () => {
+    const games = await getRecentGames(5);
+    expect(games).toHaveLength(5);
+  });
+
+  it("getSchedule returns 15 entries: 10 past (chronological) then 5 upcoming", async () => {
+    const now = new Date("2026-09-20T03:00:00Z");
+    const entries = await getSchedule(now);
+    expect(entries).toHaveLength(15);
+    expect(entries.slice(0, 10).every((e) => e.kind === "past")).toBe(true);
+    expect(entries.slice(10).every((e) => e.kind === "upcoming")).toBe(true);
+
+    const pastDates = entries.slice(0, 10).map((e) => (e as { date: string }).date);
+    expect(pastDates).toEqual([...pastDates].sort());
   });
 });
 

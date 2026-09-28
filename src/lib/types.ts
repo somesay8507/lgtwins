@@ -47,3 +47,7 @@ export type TeamCheerSong = { title: string };
 export type PlayerCheerSong = { player: string; title: string };
 export type CheerStaffRole = "응원단장" | "부응원단장" | "장내아나운서" | "치어리더";
 export type CheerStaffMember = { name: string; role: CheerStaffRole };
+
+export type ScheduleEntry =
+  | { kind: "upcoming"; id: string; opponent: string; venue: string; startsAt: string }
+  | { kind: "past"; id: string; opponent: string; date: string; result: "W" | "L" | "D"; score: string };
