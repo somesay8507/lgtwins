@@ -42,3 +42,8 @@ export type HistoryEvent = {
   title: string;
   description?: string;
 };
+
+export type TeamCheerSong = { title: string };
+export type PlayerCheerSong = { player: string; title: string };
+export type CheerStaffRole = "응원단장" | "부응원단장" | "장내아나운서" | "치어리더";
+export type CheerStaffMember = { name: string; role: CheerStaffRole };
