@@ -1,0 +1,27 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  counter-reset: manner;
+}
+.item {
+  position: relative;
+  padding-left: 32px;
+  color: var(--text);
+}
+.item::before {
+  counter-increment: manner;
+  content: counter(manner);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  background: var(--red);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 0.75rem;
+  font-weight: 900;
+}
