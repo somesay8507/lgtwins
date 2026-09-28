@@ -1,0 +1,33 @@
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.role {
+  color: var(--red-soft);
+  font-weight: 900;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.name {
+  padding: 6px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.empty {
+  color: var(--muted);
+}
