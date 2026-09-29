@@ -1,0 +1,8 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.empty {
+  color: var(--muted);
+}
