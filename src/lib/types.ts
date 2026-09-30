@@ -51,3 +51,26 @@ export type CheerStaffMember = { name: string; role: CheerStaffRole };
 export type ScheduleEntry =
   | { kind: "upcoming"; id: string; opponent: string; venue: string; startsAt: string }
   | { kind: "past"; id: string; opponent: string; date: string; result: "W" | "L" | "D"; score: string };
+
+export type StandingRow = {
+  team: string;
+  wins: number;
+  losses: number;
+  draws: number;
+};
+
+export type StandingEntry = StandingRow & {
+  rank: number;
+  /** 승 / (승 + 패), 무승부 제외 */
+  winPct: number;
+  /** 1위 기준 게임차 */
+  gamesBehind: number;
+  isLg: boolean;
+};
+
+export type TeamStat = { label: string; value: string };
+
+export type LeaderCategory = {
+  title: string;
+  leaders: { name: string; value: string }[];
+};
