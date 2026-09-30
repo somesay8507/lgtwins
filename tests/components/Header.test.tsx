@@ -23,7 +23,7 @@ describe("Header", () => {
   it("marks pages that are not ready as disabled with a notice", () => {
     render(<Header />);
     const notReady = NAV_ITEMS.filter((i) => !i.ready).length;
-    expect(screen.getAllByText("준비 중")).toHaveLength(notReady);
+    expect(screen.queryAllByText("준비 중")).toHaveLength(notReady);
   });
 
   it("toggles the mobile menu", async () => {

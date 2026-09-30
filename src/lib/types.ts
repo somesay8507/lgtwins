@@ -74,3 +74,17 @@ export type LeaderCategory = {
   title: string;
   leaders: { name: string; value: string }[];
 };
+
+export type Post = {
+  id: string;
+  category: "notice" | "free" | "fanart";
+  title: string;
+  author: string;
+  date: string; // YYYY-MM-DD
+  views: number;
+  likes: number;
+  content: string;
+  excerpt: string;
+};
+
+export type PostListItem = Omit<Post, "content">;

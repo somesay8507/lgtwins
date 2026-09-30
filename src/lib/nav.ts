@@ -7,5 +7,5 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "역사", href: "/history", ready: true },
   { label: "응원", href: "/cheer", ready: true },
   { label: "순위", href: "/standings", ready: true },
-  { label: "커뮤니티", href: "/community", ready: false },
+  { label: "커뮤니티", href: "/community", ready: true },
 ];
