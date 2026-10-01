@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import PostList from "./PostList";
-import type { PostListItem } from "@/lib/types";
+import { useLocalStorage } from "@/lib/hooks/useLocalStorage";
+import type { Post, PostListItem } from "@/lib/types";
 
 type Tab = "all" | "notice" | "free" | "fanart";
 type Sort = "latest" | "popular";
@@ -35,10 +36,26 @@ export default function PostExplorer({ posts }: { posts: PostListItem[] }) {
   const [activeTab, setActiveTab] = useState<Tab>("all");
   const [sortBy, setSortBy] = useState<Sort>("latest");
   const [searchQuery, setSearchQuery] = useState("");
+  const [userPosts, setUserPosts] = useLocalStorage<Post[]>("user_posts", []);
+  const [showForm, setShowForm] = useState(false);
+  const [formData, setFormData] = useState({
+    title: "",
+    author: "",
+    content: "",
+    category: "free" as const,
+  });
+
+  const allPosts = useMemo(() => {
+    const combined = [
+      ...posts,
+      ...userPosts.map((p) => ({ ...p, content: undefined }) as PostListItem),
+    ];
+    return combined;
+  }, [posts, userPosts]);
 
   const filtered = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    const result = posts.filter(
+    const result = allPosts.filter(
       (p) =>
         (activeTab === "all" || p.category === activeTab) &&
         (!q || p.title.toLowerCase().includes(q)),
@@ -48,10 +65,184 @@ export default function PostExplorer({ posts }: { posts: PostListItem[] }) {
         ? b.likes - a.likes
         : new Date(b.date).getTime() - new Date(a.date).getTime(),
     );
-  }, [posts, activeTab, sortBy, searchQuery]);
+  }, [allPosts, activeTab, sortBy, searchQuery]);
+
+  const handleAddPost = () => {
+    if (!formData.title.trim() || !formData.author.trim() || !formData.content.trim()) {
+      alert("제목, 작성자, 내용을 모두 입력해주세요.");
+      return;
+    }
+
+    const newPost: Post = {
+      id: `user-${Date.now()}`,
+      category: formData.category,
+      title: formData.title,
+      author: formData.author,
+      date: new Date().toISOString().split("T")[0],
+      views: 0,
+      likes: 0,
+      content: formData.content,
+      excerpt: formData.content.substring(0, 100),
+    };
+
+    setUserPosts([newPost, ...userPosts]);
+    setFormData({ title: "", author: "", content: "", category: "free" });
+    setShowForm(false);
+  };
 
   return (
     <div>
+      {/* 글 쓰기 폼 */}
+      <div style={{ marginBottom: "32px" }}>
+        {!showForm ? (
+          <button
+            onClick={() => setShowForm(true)}
+            style={{
+              width: "100%",
+              padding: "16px",
+              borderRadius: "8px",
+              border: "2px solid var(--red-soft)",
+              background: "var(--surface-2)",
+              color: "var(--red-soft)",
+              cursor: "pointer",
+              fontWeight: "600",
+              fontSize: "1rem",
+            }}
+          >
+            ✏️ 새 글 쓰기
+          </button>
+        ) : (
+          <div
+            style={{
+              padding: "20px",
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              background: "var(--surface-2)",
+            }}
+          >
+            <h3 style={{ marginBottom: "16px", fontWeight: "600" }}>새 글 작성</h3>
+
+            <div style={{ marginBottom: "12px" }}>
+              <label style={{ display: "block", marginBottom: "6px", fontSize: "0.9rem" }}>
+                작성자
+              </label>
+              <input
+                type="text"
+                placeholder="닉네임을 입력하세요"
+                value={formData.author}
+                onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "6px",
+                  border: "1px solid var(--border)",
+                  background: "var(--surface)",
+                  color: "var(--text)",
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: "12px" }}>
+              <label style={{ display: "block", marginBottom: "6px", fontSize: "0.9rem" }}>
+                카테고리
+              </label>
+              <select
+                value={formData.category}
+                onChange={(e) =>
+                  setFormData({ ...formData, category: e.target.value as "notice" | "free" | "fanart" })
+                }
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "6px",
+                  border: "1px solid var(--border)",
+                  background: "var(--surface)",
+                  color: "var(--text)",
+                }}
+              >
+                <option value="free">자유 게시판</option>
+                <option value="fanart">팬 창작물</option>
+              </select>
+            </div>
+
+            <div style={{ marginBottom: "12px" }}>
+              <label style={{ display: "block", marginBottom: "6px", fontSize: "0.9rem" }}>
+                제목
+              </label>
+              <input
+                type="text"
+                placeholder="제목을 입력하세요"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "6px",
+                  border: "1px solid var(--border)",
+                  background: "var(--surface)",
+                  color: "var(--text)",
+                }}
+              />
+            </div>
+
+            <div style={{ marginBottom: "12px" }}>
+              <label style={{ display: "block", marginBottom: "6px", fontSize: "0.9rem" }}>
+                내용
+              </label>
+              <textarea
+                placeholder="내용을 입력하세요"
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                rows={6}
+                style={{
+                  width: "100%",
+                  padding: "10px",
+                  borderRadius: "6px",
+                  border: "1px solid var(--border)",
+                  background: "var(--surface)",
+                  color: "var(--text)",
+                  fontFamily: "inherit",
+                  resize: "vertical",
+                }}
+              />
+            </div>
+
+            <div style={{ display: "flex", gap: "12px" }}>
+              <button
+                onClick={handleAddPost}
+                style={{
+                  flex: 1,
+                  padding: "10px",
+                  borderRadius: "6px",
+                  border: "none",
+                  background: "var(--red-soft)",
+                  color: "white",
+                  cursor: "pointer",
+                  fontWeight: "600",
+                }}
+              >
+                작성하기
+              </button>
+              <button
+                onClick={() => setShowForm(false)}
+                style={{
+                  flex: 1,
+                  padding: "10px",
+                  borderRadius: "6px",
+                  border: "1px solid var(--border)",
+                  background: "transparent",
+                  color: "var(--text)",
+                  cursor: "pointer",
+                  fontWeight: "600",
+                }}
+              >
+                취소
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
       <div style={{ marginBottom: "32px" }}>
         <div
           role="group"

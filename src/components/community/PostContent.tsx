@@ -38,7 +38,7 @@ export default async function PostContent({
         </Link>
       </div>
 
-      {comments && <CommentSection comments={comments} />}
+      {comments && <CommentSection comments={comments} postId={post.id} />}
     </article>
   );
 }
