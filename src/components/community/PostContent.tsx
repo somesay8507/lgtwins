@@ -1,14 +1,18 @@
 import Link from "next/link";
 import type { Post } from "@/lib/types";
+import { getCommentsByPostId } from "@/lib/comments";
+import { safe } from "@/lib/safe";
+import CommentSection from "./CommentSection";
 import styles from "./community.module.css";
 
-export default function PostContent({
+export default async function PostContent({
   post,
   categoryLabel,
 }: {
   post: Post;
   categoryLabel: string;
 }) {
+  const comments = await safe(() => getCommentsByPostId(post.id));
   return (
     <article>
       <div style={{ marginBottom: "24px", paddingBottom: "24px", borderBottom: "1px solid var(--border)" }}>
@@ -33,6 +37,8 @@ export default function PostContent({
           목록으로
         </Link>
       </div>
+
+      {comments && <CommentSection comments={comments} />}
     </article>
   );
 }

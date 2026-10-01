@@ -88,3 +88,14 @@ export type Post = {
 };
 
 export type PostListItem = Omit<Post, "content">;
+
+export type Comment = {
+  id: string;
+  postId: string;
+  author: string;
+  content: string;
+  date: string; // YYYY-MM-DD
+  likes: number;
+};
+
+export type CommentListItem = Comment;
