@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import PostContent from "@/components/community/PostContent";
 import { getPost } from "@/lib/posts";
+import { getCommentsByPostId } from "@/lib/comments";
 import { safe } from "@/lib/safe";
 import styles from "./page.module.css";
 
@@ -24,12 +25,13 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   if (!post) notFound();
 
   const categoryLabel = CATEGORY_LABELS[post.category as keyof typeof CATEGORY_LABELS];
+  const comments = await safe(() => getCommentsByPostId(id));
 
   return (
     <section className={`container ${styles.section}`} aria-labelledby="post-title">
       <p className={styles.eyebrow}>게시글</p>
       <h1 id="post-title" className={styles.heading}>{post.title}</h1>
-      <PostContent post={post} categoryLabel={categoryLabel} />
+      <PostContent post={post} categoryLabel={categoryLabel} comments={comments || []} />
     </section>
   );
 }

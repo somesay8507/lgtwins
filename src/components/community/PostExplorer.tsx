@@ -90,6 +90,14 @@ export default function PostExplorer({ posts }: { posts: PostListItem[] }) {
     setShowForm(false);
   };
 
+  const handleDeletePost = (postId: string) => {
+    if (confirm("이 게시물을 삭제하시겠습니까?")) {
+      setUserPosts(userPosts.filter((p) => p.id !== postId));
+    }
+  };
+
+  const isUserPost = (id: string) => id.startsWith("user-");
+
   return (
     <div>
       {/* 글 쓰기 폼 */}
@@ -298,7 +306,64 @@ export default function PostExplorer({ posts }: { posts: PostListItem[] }) {
         />
       </div>
 
-      <PostList items={filtered} />
+      {filtered.length === 0 ? (
+        <p style={{ color: "var(--text-secondary)", textAlign: "center" }}>글이 없어요.</p>
+      ) : (
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          {filtered.map((post) => (
+            <div
+              key={post.id}
+              style={{
+                padding: "16px",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: "8px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+                gap: "12px",
+              }}
+            >
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: "16px", fontWeight: "600", marginBottom: "8px" }}>
+                  {post.title}
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "12px",
+                    fontSize: "13px",
+                    color: "var(--text-secondary)",
+                  }}
+                >
+                  <span>{post.author}</span>
+                  <span>{post.date}</span>
+                  <span>👀 {post.views}</span>
+                  <span>👍 {post.likes}</span>
+                </div>
+              </div>
+              {isUserPost(post.id) && (
+                <button
+                  onClick={() => handleDeletePost(post.id)}
+                  style={{
+                    padding: "6px 12px",
+                    background: "#fee",
+                    color: "#c00",
+                    border: "1px solid #fcc",
+                    borderRadius: "4px",
+                    cursor: "pointer",
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  🗑️ 삭제
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
