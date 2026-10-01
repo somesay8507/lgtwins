@@ -98,8 +98,41 @@ export default function PostExplorer({ posts }: { posts: PostListItem[] }) {
 
   const isUserPost = (id: string) => id.startsWith("user-");
 
+  const handleResetData = () => {
+    if (confirm("작성된 모든 게시물과 댓글을 삭제하시겠습니까? (더미 데이터는 유지됩니다)")) {
+      setUserPosts([]);
+      // 모든 댓글 데이터 초기화
+      localStorage.removeItem("user_posts");
+      const postIds = allPosts.map((p) => p.id);
+      postIds.forEach((id) => {
+        localStorage.removeItem(`comments_${id}`);
+        localStorage.removeItem(`liked_comments_${id}`);
+      });
+      alert("✅ 데이터가 초기화되었습니다");
+    }
+  };
+
   return (
     <div>
+      {/* 초기화 버튼 */}
+      <div style={{ marginBottom: "16px", textAlign: "right" }}>
+        <button
+          onClick={handleResetData}
+          style={{
+            padding: "8px 12px",
+            background: "#fee",
+            color: "#c00",
+            border: "1px solid #fcc",
+            borderRadius: "4px",
+            cursor: "pointer",
+            fontSize: "12px",
+            fontWeight: "600",
+          }}
+        >
+          🔄 데이터 초기화
+        </button>
+      </div>
+
       {/* 글 쓰기 폼 */}
       <div style={{ marginBottom: "32px" }}>
         {!showForm ? (
